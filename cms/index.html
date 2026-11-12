@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CMS Website KEBABDOTCOM</title>
+<style>
+  :root { --y: #E6A800; --ink: #161412; --bg: #f4f1ea; --card: #fff; --line: #e4ddcf; --muted: #6f665a; --ok: #15803d; --err: #b91c1c; }
+  * { box-sizing: border-box; }
+  body { margin: 0; font: 15px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; background: var(--bg); color: var(--ink); }
+  header { position: sticky; top: 0; z-index: 5; display: flex; align-items: center; gap: 12px; padding: 12px 20px; background: var(--ink); color: #fff; }
+  header h1 { font-size: 16px; margin: 0 auto 0 0; }
+  header h1 span { color: var(--y); }
+  #dirty { font-size: 13px; color: #fcd34d; }
+  button, .btn { font: inherit; font-weight: 600; border: 0; border-radius: 10px; padding: 9px 16px; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; }
+  .b-y { background: var(--y); color: var(--ink); }
+  .b-d { background: #2c2824; color: #fff; }
+  .b-l { background: #fff; color: var(--ink); border: 1px solid var(--line); }
+  .b-x { background: transparent; color: var(--err); padding: 6px 10px; }
+  button:disabled { opacity: .5; cursor: default; }
+  .layout { display: grid; grid-template-columns: 220px 1fr; gap: 20px; max-width: 1180px; margin: 20px auto; padding: 0 20px; }
+  nav { display: grid; gap: 4px; align-content: start; position: sticky; top: 76px; }
+  nav button { justify-content: flex-start; background: transparent; color: var(--ink); font-weight: 500; }
+  nav button.on { background: var(--card); box-shadow: 0 1px 0 var(--line); font-weight: 700; }
+  main { min-width: 0; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 20px; margin-bottom: 16px; }
+  .card h2 { margin: 0 0 4px; font-size: 20px; }
+  .card > p.hint { margin: 0 0 16px; color: var(--muted); }
+  label { display: grid; gap: 4px; margin-bottom: 14px; font-weight: 600; font-size: 14px; }
+  label small { font-weight: 400; color: var(--muted); }
+  input[type=text], input[type=number], input[type=url], textarea { font: inherit; padding: 9px 11px; border: 1px solid var(--line); border-radius: 9px; background: #fff; width: 100%; }
+  input:focus, textarea:focus { outline: 2px solid var(--y); border-color: var(--y); }
+  textarea { min-height: 80px; resize: vertical; }
+  .check { display: flex; align-items: center; gap: 8px; }
+  .list { display: grid; gap: 12px; margin-bottom: 14px; }
+  .item { border: 1px solid var(--line); border-radius: 12px; padding: 14px; background: #fcfbf8; }
+  .item-head { display: flex; align-items: center; gap: 6px; margin-bottom: 10px; font-weight: 700; }
+  .item-head span { margin-right: auto; }
+  .item-head button { padding: 4px 9px; background: #fff; border: 1px solid var(--line); }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0 14px; }
+  .img { display: flex; gap: 12px; align-items: center; }
+  .img img { width: 84px; height: 84px; object-fit: cover; border-radius: 10px; background: #eee; border: 1px solid var(--line); }
+  .img .col { display: grid; gap: 6px; flex: 1; }
+  #toast { position: fixed; left: 50%; bottom: 20px; transform: translateX(-50%); padding: 12px 18px; border-radius: 12px; color: #fff; display: none; max-width: 90vw; white-space: pre-wrap; z-index: 10; }
+  dialog { border: 0; border-radius: 16px; padding: 22px; width: min(560px, 92vw); }
+  dialog pre { background: #f4f1ea; padding: 10px; border-radius: 8px; max-height: 200px; overflow: auto; font-size: 12px; white-space: pre-wrap; }
+  @media (max-width: 760px) { .layout { grid-template-columns: 1fr; } nav { position: static; grid-auto-flow: column; overflow-x: auto; } .grid2 { grid-template-columns: 1fr; } header h1 { display: none; } }
+</style>
+</head>
+<body>
+<header>
+  <h1>CMS Website <span>KEBABDOTCOM</span></h1>
+  <span id="dirty"></span>
+  <button class="b-l" id="save">Simpan</button>
+  <a class="btn b-d" href="/preview/" target="_blank">Pratinjau ↗</a>
+  <button class="b-y" id="publish">Publikasikan</button>
+</header>
+<div class="layout">
+  <nav id="nav"></nav>
+  <main id="main"></main>
+</div>
+<div id="toast"></div>
+<dialog id="dlg">
+  <h2 style="margin-top:0">Publikasikan ke website</h2>
+  <p>Perubahan disimpan, dikirim ke GitHub, lalu Cloudflare menayangkannya dalam ±1–2 menit.</p>
+  <pre id="changes"></pre>
+  <label>Catatan perubahan<input type="text" id="msg" placeholder="mis. Tambah menu baru, ubah harga"></label>
+  <div style="display:flex;gap:8px;justify-content:flex-end">
+    <button class="b-l" id="cancel">Batal</button>
+    <button class="b-y" id="go">Publikasikan sekarang</button>
+  </div>
+</dialog>
+<script>
+// Skema formulir: setiap bagian content/site.json
+const T = (key, label, help) => ({ key, label, type: 'text', help });
+const SCHEMA = [
+  { key: 'site', title: 'Info situs', hint: 'Nama, kontak, dan teks untuk Google & pratinjau tautan di WhatsApp.', fields: [
+    T('name', 'Nama usaha'), T('tagline', 'Slogan'),
+    { key: 'logo', label: 'Logo', type: 'image' },
+    T('whatsapp', 'Nomor WhatsApp', 'mis. 081234567890 — kosongkan bila belum ada (tombol WhatsApp muncul otomatis bila diisi)'),
+    T('email', 'Email', 'opsional'),
+    T('seo_title', 'Judul di Google'), { key: 'seo_description', label: 'Deskripsi di Google', type: 'textarea' },
+    { key: 'og_image', label: 'Gambar saat link dibagikan', type: 'image', help: 'ukuran ideal 1200 × 630' },
+    T('url', 'Alamat website'), T('pos_url', 'Alamat aplikasi POS', 'tautan "Login mitra" di bagian bawah; kosongkan untuk menyembunyikan')
+  ]},
+  { key: 'hero', title: 'Bagian atas', hint: 'Yang pertama terlihat saat website dibuka.', fields: [
+    T('eyebrow', 'Label kecil'), T('title', 'Judul besar'), { key: 'subtitle', label: 'Kalimat pembuka', type: 'textarea' },
+    T('cta_primary', 'Tombol utama'), T('cta_secondary', 'Tombol kedua'),
+    { key: 'images', label: 'Foto (maks. 3)', type: 'list', max: 3, item: { type: 'image' }, itemLabel: 'Foto' }
+  ]},
+  { key: 'about', title: 'Keunggulan', fields: [
+    T('title', 'Judul'),
+    { key: 'points', label: 'Poin', type: 'list', itemLabel: 'Poin', item: { type: 'object', fields: [T('title', 'Judul'), { key: 'text', label: 'Penjelasan', type: 'textarea' }] } }
+  ]},
+  { key: 'menu', title: 'Menu', hint: 'Urutan di sini = urutan di website. Gunakan ↑ ↓ untuk memindah.', fields: [
+    T('title', 'Judul'), T('subtitle', 'Keterangan'),
+    { key: 'show_prices', label: 'Tampilkan harga', type: 'bool' },
+    { key: 'items', label: 'Daftar menu', type: 'list', itemLabel: 'Menu', titleKey: 'name', item: { type: 'object', fields: [
+      T('name', 'Nama menu'), { key: 'category', label: 'Kategori', type: 'text', datalist: 'cats' },
+      { key: 'price', label: 'Harga (Rp)', type: 'number' }, T('badge', 'Label', 'opsional, mis. Favorit / Baru / Pedas'),
+      { key: 'description', label: 'Isi / keterangan', type: 'textarea' }, { key: 'image', label: 'Foto', type: 'image' }
+    ] } }
+  ]},
+  { key: 'outlets', title: 'Outlet', fields: [
+    T('title', 'Judul'), T('subtitle', 'Keterangan'),
+    { key: 'items', label: 'Daftar outlet', type: 'list', itemLabel: 'Outlet', titleKey: 'name', item: { type: 'object', fields: [
+      T('name', 'Nama outlet'), T('city', 'Kota'), T('address', 'Alamat'), T('hours', 'Jam buka', 'mis. Setiap hari 10.00–22.00'),
+      T('maps', 'Link Google Maps', 'Google Maps → Bagikan → Salin link. Kosong = pencarian otomatis nama outlet')
+    ] } }
+  ]},
+  { key: 'franchise', title: 'Franchise', fields: [
+    { key: 'enabled', label: 'Tampilkan bagian franchise', type: 'bool' },
+    T('title', 'Judul'), { key: 'text', label: 'Penjelasan', type: 'textarea' },
+    { key: 'points', label: 'Poin keuntungan', type: 'list', itemLabel: 'Poin', item: { type: 'text' } },
+    T('cta', 'Tulisan tombol'), T('whatsapp_message', 'Pesan WhatsApp otomatis', 'tombol membuka WhatsApp dengan pesan ini (butuh nomor WhatsApp di Info situs)')
+  ]},
+  { key: 'social', title: 'Media sosial', fields: [T('instagram', 'Instagram (link lengkap)'), T('tiktok', 'TikTok (link lengkap)')] },
+  { key: 'footer', title: 'Bagian bawah', fields: [T('text', 'Teks hak cipta', '{tahun} otomatis menjadi tahun berjalan')] }
+];
+
+let data, current = SCHEMA[0].key, dirty = false;
+const $ = s => document.querySelector(s);
+const el = (tag, attrs = {}, ...kids) => { const e = document.createElement(tag); for (const [k, v] of Object.entries(attrs)) k.startsWith('on') ? e.addEventListener(k.slice(2), v) : k === 'text' ? e.textContent = v : e.setAttribute(k, v); e.append(...kids.filter(Boolean)); return e; };
+function toast(msg, ok = true) { const t = $('#toast'); t.textContent = msg; t.style.background = ok ? 'var(--ok)' : 'var(--err)'; t.style.display = 'block'; clearTimeout(toast.t); toast.t = setTimeout(() => t.style.display = 'none', ok ? 2500 : 7000); }
+function setDirty(v) { dirty = v; $('#dirty').textContent = v ? '● belum disimpan' : ''; }
+async function call(method, url, body) {
+  const r = await fetch(url, { method, headers: { 'content-type': 'application/json' }, body: body ? JSON.stringify(body) : undefined });
+  const j = await r.json(); if (!r.ok) throw new Error(j.error || r.status); return j;
+}
+
+function field(def, obj, key) {
+  const v = obj[key], help = def.help ? el('small', { text: def.help }) : null;
+  const set = val => { obj[key] = val; setDirty(true); };
+  if (def.type === 'bool') { const c = el('input', { type: 'checkbox', onchange: e => set(e.target.checked) }); c.checked = !!v; return el('label', { class: 'check' }, c, def.label); }
+  if (def.type === 'textarea') { const t = el('textarea', { oninput: e => set(e.target.value) }); t.value = v || ''; return el('label', {}, def.label, help, t); }
+  if (def.type === 'number') { const i = el('input', { type: 'number', min: '0', step: '500', oninput: e => set(Number(e.target.value) || 0) }); i.value = v ?? ''; return el('label', {}, def.label, help, i); }
+  if (def.type === 'image') return imageField(def, obj, key, help);
+  if (def.type === 'list') return listField(def, obj, key);
+  const i = el('input', { type: 'text', oninput: e => set(e.target.value), ...(def.datalist ? { list: def.datalist } : {}) }); i.value = v || '';
+  return el('label', {}, def.label, help, i);
+}
+function imageField(def, obj, key, help) {
+  const img = el('img', { alt: '' }); if (obj[key]) img.src = obj[key];
+  const path = el('small', { text: obj[key] || 'belum ada foto' });
+  const file = el('input', { type: 'file', accept: 'image/jpeg,image/png,image/webp', onchange: async e => {
+    const f = e.target.files[0]; if (!f) return;
+    const data64 = await new Promise(res => { const r = new FileReader(); r.onload = () => res(r.result); r.readAsDataURL(f); });
+    try { const { path: p } = await call('POST', '/api/upload', { name: f.name, data: data64 }); obj[key] = p; img.src = p; path.textContent = p; setDirty(true); toast('Foto diunggah — jangan lupa Simpan'); }
+    catch (err) { toast(err.message, false); }
+  } });
+  return el('div', { class: 'img', style: 'margin-bottom:14px' }, img, el('div', { class: 'col' }, el('strong', { text: def.label || 'Foto' }), help, file, path));
+}
+function listField(def, obj, key) {
+  const arr = obj[key] = obj[key] || [];
+  const box = el('div', { class: 'list' });
+  const draw = () => {
+    box.replaceChildren();
+    arr.forEach((it, i) => {
+      const move = d => { const j = i + d; if (j < 0 || j >= arr.length) return; [arr[i], arr[j]] = [arr[j], arr[i]]; setDirty(true); draw(); };
+      const head = el('div', { class: 'item-head' }, el('span', { text: `${def.itemLabel || 'Item'} ${i + 1}${def.titleKey && it[def.titleKey] ? ' — ' + it[def.titleKey] : ''}` }),
+        el('button', { title: 'Naik', onclick: () => move(-1) }, '↑'), el('button', { title: 'Turun', onclick: () => move(1) }, '↓'),
+        el('button', { class: 'b-x', onclick: () => { if (confirm('Hapus item ini?')) { arr.splice(i, 1); setDirty(true); draw(); } } }, 'Hapus'));
+      let body;
+      if (def.item.type === 'object') { body = el('div', { class: 'grid2' }); def.item.fields.forEach(f => body.append(field(f, it, f.key))); }
+      else body = field({ ...def.item, label: '' }, arr, i);
+      box.append(el('div', { class: 'item' }, head, body));
+    });
+    if (!def.max || arr.length < def.max) box.append(el('div', {}, el('button', { class: 'b-l', onclick: () => {
+      arr.push(def.item.type === 'object' ? Object.fromEntries(def.item.fields.map(f => [f.key, f.type === 'number' ? 0 : ''])) : '');
+      setDirty(true); draw(); box.lastElementChild.previousElementSibling?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    } }, `+ Tambah ${(def.itemLabel || 'item').toLowerCase()}`)));
+  };
+  draw();
+  return el('div', {}, el('strong', { text: def.label, style: 'display:block;margin-bottom:8px' }), box);
+}
+function render() {
+  $('#nav').replaceChildren(...SCHEMA.map(s => el('button', { class: s.key === current ? 'on' : '', onclick: () => { current = s.key; render(); scrollTo(0, 0); } }, s.title)));
+  const s = SCHEMA.find(x => x.key === current), obj = data[s.key] = data[s.key] || {};
+  const cats = el('datalist', { id: 'cats' }, ...[...new Set((data.menu?.items || []).map(m => m.category).filter(Boolean))].map(c => el('option', { value: c })));
+  const card = el('div', { class: 'card' }, el('h2', { text: s.title }), s.hint ? el('p', { class: 'hint', text: s.hint }) : null, cats);
+  s.fields.forEach(f => card.append(field(f, obj, f.key)));
+  $('#main').replaceChildren(card);
+}
+async function save() {
+  try { await call('PUT', '/api/content', data); setDirty(false); toast('Tersimpan — buka Pratinjau untuk melihat hasil'); return true; }
+  catch (e) { toast('Gagal menyimpan: ' + e.message, false); return false; }
+}
+$('#save').onclick = save;
+$('#publish').onclick = async () => {
+  if (dirty && !(await save())) return;
+  const g = await call('GET', '/api/git');
+  if (!g.remote) return toast('Folder ini belum terhubung ke GitHub. Ikuti langkah di README.md (git remote add origin …).', false);
+  $('#changes').textContent = g.changes.length ? 'Berkas berubah:\n' + g.changes.join('\n') : 'Tidak ada perubahan baru (akan mengirim ulang versi terakhir).';
+  $('#msg').value = ''; $('#dlg').showModal();
+};
+$('#cancel').onclick = () => $('#dlg').close();
+$('#go').onclick = async () => {
+  const b = $('#go'); b.disabled = true; b.textContent = 'Mengirim…';
+  try { await call('POST', '/api/publish', { message: $('#msg').value }); $('#dlg').close(); toast('Terkirim ke GitHub. Website diperbarui dalam ±1–2 menit.'); }
+  catch (e) { toast('Gagal publikasi:\n' + e.message, false); }
+  finally { b.disabled = false; b.textContent = 'Publikasikan sekarang'; }
+};
+addEventListener('beforeunload', e => { if (dirty) e.preventDefault(); });
+call('GET', '/api/content').then(d => { data = d; render(); }).catch(e => toast(e.message, false));
+</script>
+</body>
+</html>

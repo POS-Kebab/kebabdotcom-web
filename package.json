@@ -1,0 +1,15 @@
+{
+  "name": "kebabdotcom-web",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Website KEBABDOTCOM (landing page statis di Cloudflare) + CMS lokal",
+  "type": "module",
+  "scripts": {
+    "cms": "node cms/server.mjs",
+    "build": "node build.mjs",
+    "deploy": "node build.mjs && wrangler deploy"
+  },
+  "devDependencies": {
+    "wrangler": "4.147.0"
+  }
+}

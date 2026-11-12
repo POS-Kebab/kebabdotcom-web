@@ -1,0 +1,253 @@
+{
+  "site": {
+    "name": "KEBABDOTCOM",
+    "tagline": "Kualitas rasa tak pernah bohong",
+    "url": "https://kebabdotcom.id",
+    "logo": "/img/brand/logo.png",
+    "og_image": "/img/brand/og-image.png",
+    "seo_title": "KEBABDOTCOM — Kebab kekinian, kualitas rasa tak pernah bohong",
+    "seo_description": "Kebab, burger & camilan KEBABDOTCOM. Lihat menu, temukan outlet terdekat, dan info peluang franchise.",
+    "whatsapp": "",
+    "email": "",
+    "pos_url": "https://pos.kebabdotcom.id"
+  },
+  "social": {
+    "instagram": "https://www.instagram.com/kebab_dotcom/",
+    "tiktok": "https://www.tiktok.com/@kebabdotcom"
+  },
+  "hero": {
+    "eyebrow": "Kebab kekinian",
+    "title": "Kualitas rasa tak pernah bohong",
+    "subtitle": "Tortila hangat, isian melimpah, saus racikan sendiri. Dibuat segar setiap pesanan di outlet KEBABDOTCOM.",
+    "cta_primary": "Lihat Menu",
+    "cta_secondary": "Cari Outlet",
+    "images": [
+      "/img/menu/cheese-mania.jpg",
+      "/img/menu/super-hot.jpg",
+      "/img/menu/special-dotcom.jpg"
+    ]
+  },
+  "about": {
+    "title": "Kenapa KEBABDOTCOM?",
+    "points": [
+      {
+        "title": "Isian melimpah",
+        "text": "Daging, keju, dan sayur segar dalam porsi yang bikin kenyang."
+      },
+      {
+        "title": "Saus racikan sendiri",
+        "text": "Dari cheese sauce sampai super hot — rasa khas yang tidak ditemukan di tempat lain."
+      },
+      {
+        "title": "Dibuat saat dipesan",
+        "text": "Setiap kebab dipanggang dan digulung baru, tetap hangat sampai di tangan."
+      }
+    ]
+  },
+  "menu": {
+    "title": "Menu",
+    "subtitle": "Harga dapat berbeda di tiap outlet.",
+    "show_prices": true,
+    "items": [
+      {
+        "name": "Cheese Mania",
+        "category": "Premium",
+        "price": 30000,
+        "description": "Double Beef Slice, Double Keju Slice, Bombay with Cheese Sauce",
+        "image": "/img/menu/cheese-mania.jpg",
+        "badge": "Favorit"
+      },
+      {
+        "name": "Super Hot Beef",
+        "category": "Super Hot",
+        "price": 23000,
+        "description": "Beef Slice, Lettuce & Bombay with Super Hot Sauce",
+        "image": "/img/menu/super-hot.jpg",
+        "badge": "Pedas"
+      },
+      {
+        "name": "Super Hot Chicken",
+        "category": "Super Hot",
+        "price": 23000,
+        "description": "Chicken, Lettuce & Bombay with Super Hot Sauce",
+        "image": "/img/menu/super-hot.jpg",
+        "badge": ""
+      },
+      {
+        "name": "Super Hot Tuna",
+        "category": "Super Hot",
+        "price": 25000,
+        "description": "Tuna, Lettuce & Bombay with Super Hot Sauce",
+        "image": "/img/menu/super-hot.jpg",
+        "badge": ""
+      },
+      {
+        "name": "Special Dotcom",
+        "category": "Regular",
+        "price": 25000,
+        "description": "Beef Slice, Telur, Keju Slice, Lettuce & Bombay",
+        "image": "/img/menu/special-dotcom.jpg",
+        "badge": "Andalan"
+      },
+      {
+        "name": "Super Cheesy",
+        "category": "Regular",
+        "price": 25000,
+        "description": "Beef Slice, Telur, Keju Slice, Mozzarella, Bombay with Cheese Mayo",
+        "image": "/img/menu/super-cheesy.jpg",
+        "badge": ""
+      },
+      {
+        "name": "Omelette",
+        "category": "Regular",
+        "price": 18000,
+        "description": "Double Telur, Lettuce & Bombay",
+        "image": "/img/menu/omelette.jpg",
+        "badge": ""
+      },
+      {
+        "name": "Full Beef",
+        "category": "Regular",
+        "price": 22000,
+        "description": "Double Beef Slice & Bombay",
+        "image": "/img/menu/full-beef.jpg",
+        "badge": ""
+      },
+      {
+        "name": "Beef",
+        "category": "Regular",
+        "price": 20000,
+        "description": "Beef Slice, Lettuce & Bombay",
+        "image": "/img/menu/beef.jpg",
+        "badge": ""
+      },
+      {
+        "name": "Sosis",
+        "category": "Regular",
+        "price": 18000,
+        "description": "Double Sosis, Lettuce & Bombay",
+        "image": "/img/menu/sosis.jpg",
+        "badge": ""
+      },
+      {
+        "name": "Chicken",
+        "category": "Regular",
+        "price": 20000,
+        "description": "Chicken, Lettuce & Bombay",
+        "image": "/img/menu/chicken.jpg",
+        "badge": ""
+      },
+      {
+        "name": "Tuna",
+        "category": "Regular",
+        "price": 22000,
+        "description": "Tuna, Lettuce & Bombay",
+        "image": "/img/menu/tuna.jpg",
+        "badge": ""
+      },
+      {
+        "name": "Piscok",
+        "category": "Regular",
+        "price": 16000,
+        "description": "Pisang, Coklat Stik & Keju Parut",
+        "image": "/img/menu/piscok.jpg",
+        "badge": ""
+      },
+      {
+        "name": "Beef Burger",
+        "category": "Worth to Try",
+        "price": 20000,
+        "description": "Roti Burger, Beef Patty, Keju Slice, Lettuce & Bombay",
+        "image": "/img/menu/beef-burger.jpg",
+        "badge": ""
+      },
+      {
+        "name": "Maryam Coklat Keju",
+        "category": "Worth to Try",
+        "price": 15000,
+        "description": "Roti Maryam, Meises Coklat, SKM & Keju Parut",
+        "image": "/img/menu/maryam.jpg",
+        "badge": ""
+      },
+      {
+        "name": "Kebab Frozen (6 pcs)",
+        "category": "Worth to Try",
+        "price": 35000,
+        "description": "Mini Kebab Frozen isi 6",
+        "image": "/img/menu/kebab-frozen.jpg",
+        "badge": ""
+      }
+    ]
+  },
+  "outlets": {
+    "title": "Outlet",
+    "subtitle": "Mampir ke outlet KEBABDOTCOM terdekat.",
+    "items": [
+      {
+        "name": "Pakelan",
+        "city": "Magelang",
+        "address": "",
+        "hours": "",
+        "maps": ""
+      },
+      {
+        "name": "Kantor Pos",
+        "city": "Magelang",
+        "address": "",
+        "hours": "",
+        "maps": ""
+      },
+      {
+        "name": "Armada Estate",
+        "city": "Magelang",
+        "address": "",
+        "hours": "",
+        "maps": ""
+      },
+      {
+        "name": "Pecinan",
+        "city": "Magelang",
+        "address": "",
+        "hours": "",
+        "maps": ""
+      },
+      {
+        "name": "Temanggung",
+        "city": "Temanggung",
+        "address": "",
+        "hours": "",
+        "maps": ""
+      },
+      {
+        "name": "Semarang",
+        "city": "Semarang",
+        "address": "",
+        "hours": "",
+        "maps": ""
+      },
+      {
+        "name": "Solo",
+        "city": "Solo",
+        "address": "",
+        "hours": "",
+        "maps": ""
+      }
+    ]
+  },
+  "franchise": {
+    "enabled": true,
+    "title": "Peluang Franchise",
+    "text": "Ingin punya usaha kuliner dengan brand yang sudah dikenal? Bergabunglah sebagai mitra KEBABDOTCOM. Kami dampingi dari persiapan outlet, bahan baku, pelatihan, sampai aplikasi kasir.",
+    "points": [
+      "Resep & bahan baku dari pusat",
+      "Pelatihan karyawan",
+      "Aplikasi kasir & laporan penjualan",
+      "Dukungan promosi dari pusat"
+    ],
+    "cta": "Tanya Peluang Franchise",
+    "whatsapp_message": "Halo KEBABDOTCOM, saya tertarik dengan peluang franchise."
+  },
+  "footer": {
+    "text": "© {tahun} KEBABDOTCOM. Semua hak dilindungi."
+  }
+}

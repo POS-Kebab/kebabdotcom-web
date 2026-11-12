@@ -1,0 +1,13 @@
+// Website statis KEBABDOTCOM: isi folder dist/ (hasil `npm run build`) dilayani langsung oleh Cloudflare (tanpa kode Worker).
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "kebabdotcom-web",
+  "compatibility_date": "2026-09-01",
+  "assets": { "directory": "./dist", "not_found_handling": "404-page", "html_handling": "auto-trailing-slash" },
+  "workers_dev": false,
+  "preview_urls": false,
+  "routes": [
+    { "pattern": "kebabdotcom.id", "custom_domain": true },
+    { "pattern": "www.kebabdotcom.id", "custom_domain": true }
+  ]
+}
