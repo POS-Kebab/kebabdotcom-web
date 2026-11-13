@@ -158,6 +158,49 @@ document.querySelectorAll('.chip').forEach(b=>b.addEventListener('click',()=>{do
 `;
 }
 
+/** Halaman sementara "segera hadir" (soon.enabled = true): yang tayang hanya halaman ini, situs lengkap tetap bisa dipratinjau di CMS. */
+export function renderSoon(c) {
+    const S = c.site, s = c.soon || {};
+    const socials = [['instagram', 'Instagram', c.social?.instagram], ['tiktok', 'TikTok', c.social?.tiktok]].filter(x => x[2]);
+    return `<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>${esc(S.name)} — ${esc(s.title || 'Segera hadir')}</title>
+<meta name="description" content="${esc(s.text)}">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#161412">
+<meta property="og:title" content="${esc(S.name)} — ${esc(s.title || 'Segera hadir')}">
+<meta property="og:description" content="${esc(s.text)}">
+<meta property="og:image" content="${esc(S.url + S.og_image)}">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/style.css">
+</head>
+<body class="soon">
+<main class="soon-in">
+  <img class="soon-logo" src="${esc(S.logo)}" alt="${esc(S.name)}" width="88" height="88">
+  <div class="cook" aria-hidden="true">
+    <div class="steam"><i></i><i></i><i></i></div>
+    <div class="kebab"><img src="${esc(s.image || '/img/menu/cheese-mania.jpg')}" alt="" width="150" height="150"></div>
+    <svg class="pan" viewBox="0 0 320 90"><path d="M40 20h200a8 8 0 0 1 8 9l-6 30a28 28 0 0 1-27 22H65a28 28 0 0 1-27-22l-6-30a8 8 0 0 1 8-9z" fill="#2b2622"/><path d="M40 20h200" stroke="#4a423b" stroke-width="6" stroke-linecap="round"/><rect x="246" y="24" width="70" height="14" rx="7" fill="#2b2622"/></svg>
+    <div class="flames"><i></i><i></i><i></i><i></i><i></i></div>
+  </div>
+  <h1>${esc(s.title || 'Web is cooking now')}</h1>
+  <p>${esc(s.text)}</p>
+  <div class="progress" role="img" aria-label="Sedang disiapkan"><span></span></div>
+  ${socials.length ? `<div class="soon-social">${socials.map(([k, n, u]) => `<a href="${esc(u)}" target="_blank" rel="noopener">${ICON[k]} ${n}</a>`).join('')}</div>` : ''}
+</main>
+<div class="tape" aria-hidden="true"><div>${Array(10).fill(`<span>${esc(s.tape || 'Under construction')}</span>`).join('')}</div></div>
+</body>
+</html>
+`;
+}
+
 export function build() {
     const c = JSON.parse(readFileSync(join(ROOT, 'content/site.json'), 'utf8'));
     for (const k of ['site', 'hero', 'menu', 'outlets']) if (!c[k]) throw new Error(`content/site.json: bagian "${k}" tidak ada`);
@@ -165,7 +208,7 @@ export function build() {
     rmSync(DIST, { recursive: true, force: true });
     mkdirSync(DIST, { recursive: true });
     cpSync(join(ROOT, 'public'), DIST, { recursive: true });
-    writeFileSync(join(DIST, 'index.html'), render(c));
+    writeFileSync(join(DIST, 'index.html'), c.soon?.enabled ? renderSoon(c) : render(c));
     writeFileSync(join(DIST, '404.html'), `<!doctype html><html lang="id"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Halaman tidak ditemukan — ${esc(c.site.name)}</title><link rel="stylesheet" href="/style.css"><body class="notfound"><main><img src="${esc(c.site.logo)}" alt="" width="96" height="96"><h1>Halaman tidak ditemukan</h1><a class="btn btn-y" href="/">Kembali ke beranda</a></main></body></html>`);
     writeFileSync(join(DIST, 'robots.txt'), `User-agent: *\nAllow: /\nSitemap: ${c.site.url}/sitemap.xml\n`);
     writeFileSync(join(DIST, 'sitemap.xml'), `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url><loc>${esc(c.site.url)}/</loc><lastmod>${new Date().toISOString().slice(0, 10)}</lastmod></url></urlset>\n`);
@@ -173,6 +216,6 @@ export function build() {
 }
 
 if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) {
-    try { const c = build(); console.log(`dist/ siap: ${c.menu.items.length} menu, ${c.outlets.items.length} outlet`); }
+    try { const c = build(); console.log(c.soon?.enabled ? 'dist/ siap: mode SEGERA HADIR (situs lengkap disembunyikan)' : `dist/ siap: ${c.menu.items.length} menu, ${c.outlets.items.length} outlet`); }
     catch (e) { console.error('✖ ' + e.message); process.exit(1); }
 }

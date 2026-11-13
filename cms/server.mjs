@@ -7,7 +7,7 @@ import { join, dirname, extname, normalize, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
 import { randomBytes } from 'node:crypto';
-import { build } from '../build.mjs';
+import { build, render } from '../build.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const CONTENT = join(ROOT, 'content/site.json');
@@ -82,6 +82,8 @@ createServer(async (req, res) => {
         const h = api[`${req.method} ${url.pathname}`];
         if (h) return send(res, 200, await h(req));
         if (url.pathname === '/' || url.pathname === '/index.html') return serveFile(res, join(ROOT, 'cms'), 'index.html');
+        // Situs lengkap walau mode "segera hadir" menyala (hanya di CMS, tidak ikut ke dist/)
+        if (url.pathname === '/preview/' && url.searchParams.has('full')) return send(res, 200, render(JSON.parse(readFileSync(CONTENT, 'utf8'))), TYPES['.html']);
         if (url.pathname.startsWith('/preview/')) return serveFile(res, join(ROOT, 'dist'), url.pathname.slice('/preview/'.length) || 'index.html');
         if (url.pathname === '/preview') { res.writeHead(302, { location: '/preview/' }); return res.end(); }
         // Pratinjau memakai alamat absolut (/style.css, /img/…) → layani dari dist

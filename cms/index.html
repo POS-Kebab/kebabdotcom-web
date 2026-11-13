@@ -52,7 +52,8 @@
   <h1>CMS Website <span>KEBABDOTCOM</span></h1>
   <span id="dirty"></span>
   <button class="b-l" id="save">Simpan</button>
-  <a class="btn b-d" href="/preview/" target="_blank">Pratinjau ↗</a>
+  <a class="btn b-d" href="/preview/" target="_blank" title="Yang akan tayang di website">Pratinjau ↗</a>
+  <a class="btn b-d" href="/preview/?full=1" target="_blank" id="full" title="Situs lengkap walau mode segera hadir menyala">Situs lengkap ↗</a>
   <button class="b-y" id="publish">Publikasikan</button>
 </header>
 <div class="layout">
@@ -74,6 +75,11 @@
 // Skema formulir: setiap bagian content/site.json
 const T = (key, label, help) => ({ key, label, type: 'text', help });
 const SCHEMA = [
+  { key: 'soon', title: 'Segera hadir', hint: 'Selama dicentang, website hanya menampilkan halaman "segera hadir". Situs lengkap tetap bisa dilihat lewat Pratinjau situs lengkap. Hapus centang lalu Publikasikan untuk menayangkan situs lengkap.', fields: [
+    { key: 'enabled', label: 'Tampilkan halaman "segera hadir" (situs lengkap disembunyikan)', type: 'bool' },
+    T('title', 'Judul'), { key: 'text', label: 'Kalimat', type: 'textarea' },
+    T('tape', 'Tulisan pita kuning-hitam'), { key: 'image', label: 'Foto di wajan', type: 'image' }
+  ]},
   { key: 'site', title: 'Info situs', hint: 'Nama, kontak, dan teks untuk Google & pratinjau tautan di WhatsApp.', fields: [
     T('name', 'Nama usaha'), T('tagline', 'Slogan'),
     { key: 'logo', label: 'Logo', type: 'image' },

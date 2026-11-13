@@ -24,6 +24,11 @@ Browser terbuka di http://localhost:4321:
 3. **Publikasikan** → isi catatan perubahan → website live diperbarui dalam ±1–2 menit.
 4. Selesai: tutup jendela PowerShell (atau Ctrl+C).
 
+### Mode "segera hadir" (Web is cooking now)
+CMS → **Segera hadir** → centang = website hanya menampilkan halaman "Web is cooking now" (animasi wajan + pita *Under construction*,
+tautan Instagram & TikTok, tidak diindeks Google). Situs lengkap tetap disimpan dan bisa dilihat lewat tombol **Situs lengkap ↗**.
+Saat siap tayang: hapus centang → **Simpan** → **Publikasikan**.
+
 CMS hanya bisa dibuka dari laptop ini. Bila laptop lain ingin mengubah: clone repo, `npm install`, `npm run cms`.
 
 ## Penyiapan pertama (sekali)

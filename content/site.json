@@ -11,6 +11,13 @@
     "email": "",
     "pos_url": "https://pos.kebabdotcom.id"
   },
+  "soon": {
+    "enabled": true,
+    "title": "Web is cooking now",
+    "text": "Website KEBABDOTCOM sedang kami siapkan. Sementara itu, intip menu & promo terbaru di Instagram dan TikTok kami.",
+    "tape": "Under construction",
+    "image": "/img/menu/cheese-mania.jpg"
+  },
   "social": {
     "instagram": "https://www.instagram.com/kebab_dotcom/",
     "tiktok": "https://www.tiktok.com/@kebabdotcom"
